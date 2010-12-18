@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" verticalScrollPolicy="off"  height="150">
+
+  <mx:creationComplete>
+    rX = _rX;
+  </mx:creationComplete>
+  
+  <mx:Script>
+  <![CDATA[
+    import mx.effects.easing.Bounce;
+  
+    [Bindable] public var frontTileText:String;
+    [Bindable] public var backTileText:String;
+    private var _rX:Number;
+    
+    public function set rX(rX:Number):void
+    {
+      
+      if (back != null && front != null)
+      {
+        if ((rX == 0) && (_rX == -180))
+        {
+          flipEffect.play([this]);
+        }
+        else
+        {
+          back.rotationX = rX;
+          front.rotationX = rX;
+        }
+        
+        _rX = rX;
+        
+        if ((rX < -80) || (rX > 100))
+        {
+          // put the back in front
+          if (getChildIndex(back) < getChildIndex(front))
+          {
+            setChildIndex(back, 1);
+            setChildIndex(front, 0);
+          }
+        }
+        else
+        {
+          // put the front in back
+          if (getChildIndex(back) > getChildIndex(front))
+          {
+            setChildIndex(back, 0);
+            setChildIndex(front, 1);
+          }
+        }
+      }
+    }
+    
+    public function get rX():Number
+    {
+      return _rX;
+    }
+  ]]>
+  </mx:Script>
+  
+  <mx:AnimateProperty id="flipEffect" property="rX" fromValue="-180" toValue="0" duration="600" easingFunction="Bounce.easeOut"/>
+
+  <mx:Canvas id="back" width="175" height="75" backgroundColor="#666666" horizontalScrollPolicy="off" verticalScrollPolicy="off" y="75">
+    <mx:Canvas width="175" height="75" horizontalScrollPolicy="off" verticalScrollPolicy="off" rotationX="180" y="75">
+      <mx:Label text="{backTileText}" color="#dddddd" fontSize="148" y="-10"/>
+    </mx:Canvas>
+  </mx:Canvas>
+
+  <mx:Canvas id="front" width="175" height="75" backgroundColor="#666666" horizontalScrollPolicy="off" verticalScrollPolicy="off" y="75">
+    <mx:Label text="{frontTileText}" color="#dddddd" fontSize="148" y="-85"/>
+  </mx:Canvas>
+  
+</mx:Canvas>

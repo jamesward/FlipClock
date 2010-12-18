@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+  
+  <local:Tile id="testTile" frontTileText="00" backTileText="59"/>
+  
+  <mx:HSlider id="tileRotator" liveDragging="true" minimum="-180" maximum="180" change="testTile.rX = tileRotator.value" snapInterval="1" value="0"/>
+  
+</mx:Application>

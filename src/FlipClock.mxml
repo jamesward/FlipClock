@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" applicationComplete="initApp()" xmlns:local="*">
+  
+  <mx:Script>
+  <![CDATA[
+    private var startTime:Date;
+  
+    private function initApp():void
+    {
+      var minutes:Array = new Array();
+      for (var i:int = 9; i >= 0; i--)
+      {
+        minutes.push(nf.format(i));
+      }
+      
+      minutesDial.tileStrings = minutes;
+      minutesDial.currentTile = 0;
+      
+      var seconds:Array = new Array();
+      for (var j:int = 59; j >= 0; j--)
+      {
+        seconds.push(nf.format(j));
+      }
+      
+      secondsDial.tileStrings = seconds;
+      secondsDial.currentTile = 0;
+    }
+    
+    private function startClock():void
+    {
+      startTime = new Date();
+      
+      var t:Timer = new Timer(100);
+      t.addEventListener(TimerEvent.TIMER, updateClock);
+      t.start();
+    }
+    
+    private function updateClock(event:TimerEvent):void
+    {
+      var diff:int = ((new Date()).time - startTime.time)
+      var mins:int = diff / 60000;
+      var secs:int = (diff % 60000) / 1000;
+      
+      minutesDial.currentTile = mins;
+      secondsDial.currentTile = secs;
+    }
+  ]]>
+  </mx:Script>
+  
+  <local:TwoDigitFormatter id="nf"/>
+  
+  <mx:HBox horizontalGap="75">
+    <local:FlipDial id="minutesDial"/>
+    
+    <local:FlipDial id="secondsDial"/>
+  </mx:HBox>
+  
+  <mx:Button label="Start" click="startClock()"/>
+  
+</mx:Application>

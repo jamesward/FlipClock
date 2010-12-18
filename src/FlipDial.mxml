@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="175" height="150" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+  
+  <mx:Script>
+  <![CDATA[
+    private var _tileStrings:Array;
+    private var _currentTile:Number;
+    private var tiles:Array;
+    
+    public function set currentTile(tileNum:int):void
+    {
+      if (_currentTile != tileNum)
+      {
+        _currentTile = tileNum;
+
+        updateTileRotation();
+      }
+    }
+    
+    public function get currentTile():int
+    {
+      return _currentTile;
+    }
+  
+    public function set tileStrings(data:Array):void
+    {
+      _tileStrings = data;
+      
+      tiles = new Array();
+      
+      for (var i:int = 0; i < data.length; i++)
+      {
+        var t:Tile = new Tile();
+        t.frontTileText = data[i];
+        if (i == 0)
+        {
+          // display the last number on the back of the first tile
+          t.backTileText = data[data.length - 1];
+        }
+        else
+        {
+          t.backTileText = data[i - 1];
+        }
+        
+        tiles.push(t);
+        addChildAt(t, 0);
+      }
+      
+      currentTile = 0;
+    }
+    
+    private function updateTileRotation():void
+    {
+      if (tiles[currentTile] == null)
+      {
+        return;
+      }
+      
+      var partialAngle:Number = 180 / (tiles.length - 1);
+      var lastAngle:Number = -180;
+      
+      var j:int = _currentTile + 1;
+      
+      for (var i:int = 0; i < tiles.length - 2; i++)
+      {
+        if (j > tiles.length - 1)
+        {
+          j = 0;
+        }
+        
+        (tiles[j] as Tile).rX = lastAngle;
+        
+        if (lastAngle == -180)
+        {
+          lastAngle = 180;
+        }
+        
+        setChildIndex(tiles[j], tiles.length - i - 2);
+        j++;
+        lastAngle -= partialAngle;
+      }
+      
+      // handle the tile behind the currentTile
+      var k:int = _currentTile - 1;
+      if (k < 0)
+      {
+        k = tiles.length - 1;
+      }
+      tiles[k].rX = 0;
+      setChildIndex(tiles[k], tiles.length - 2);
+      
+      // handle the currentTile
+      tiles[currentTile].rX = 0;
+      setChildIndex(tiles[currentTile], tiles.length - 1);
+    }
+  ]]>
+  </mx:Script>
+  
+  <mx:Canvas width="100%" height="3" backgroundColor="#555555" verticalCenter="0"/>
+  
+</mx:Canvas>

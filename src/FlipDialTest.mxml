@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+  
+  <mx:applicationComplete>
+  <![CDATA[
+    var seconds:Array = new Array();
+      for (var j:int = 0; j < 60; j++)
+      {
+        seconds.push(nf.format(j));
+      }
+      
+      secondsDial.tileStrings = seconds;
+  ]]>
+  </mx:applicationComplete>
+  
+  <local:TwoDigitFormatter id="nf"/>
+  
+  <local:FlipDial id="secondsDial"/>
+  
+  <mx:HSlider id="s" minimum="0" maximum="60" change="secondsDial.currentTile = s.value" liveDragging="true" snapInterval="1"/>
+  
+</mx:Application>
